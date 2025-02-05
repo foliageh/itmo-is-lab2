@@ -9,95 +9,137 @@
             .max-health > input {
                 width: 8rem !important;
             }
+
+            .chapter-id > input {
+                width: 8rem !important;
+            }
+
+            .chapter-name > input {
+                width: 15rem !important;
+            }
         </style>
     </ui:define>
     <ui:define name="content">
         <div class="card">
             <h1 class="ml-3">Actions</h1>
-            <p:panel styleClass="mb-2">
-                <h:outputText id="health" value="#{not empty actionsView.health ? actionsView.health : 'Click execute to calulate the value.'}"/>
-                <f:facet name="header">
-                    Calculate total health
-                    <p:commandButton value="Execute" styleClass="ui-button-outlined ml-2"
-                                     actionListener="#{actionsView.calculateTotalHealth}"
-                                     update="health"/>
-                </f:facet>
-            </p:panel>
 
             <p:panel styleClass="mb-2">
-                <p:dataTable id="health-marines"
-                             var="spaceMarine" value="#{actionsView.healthMarines}"
-                             emptyMessage="No space marines found with given criteria.">
-                    <p:column headerText="Id" width="80">
-                        <h:outputText value="#{spaceMarine.id}"/>
-                    </p:column>
-                    <p:column headerText="Name">
-                        <h:outputText value="#{spaceMarine.name}"/>
-                    </p:column>
-                    <p:column headerText="Chapter">
-                        <h:outputText value="#{spaceMarine.chapter}"/>
-                    </p:column>
-                    <p:column headerText="Coord X" width="80">
-                        <h:outputText value="#{spaceMarine.coordinates.x}"/>
-                    </p:column>
-                    <p:column headerText="Coord Y" width="80">
-                        <h:outputText value="#{spaceMarine.coordinates.y}"/>
-                    </p:column>
-                    <p:column headerText="Health" width="70">
-                        <h:outputText value="#{spaceMarine.health}"/>
-                    </p:column>
-                    <p:column headerText="Category">
-                        <h:outputText value="#{spaceMarine.category.toString()}"
-                                      styleClass="crud-object-badge category-#{spaceMarine.category.name().toLowerCase().replace('_', '-')}"/>
-                    </p:column>
-                    <p:column headerText="Weapon">
-                        <h:outputText value="#{spaceMarine.weapon.toString()}"
-                                      styleClass="crud-object-badge weapon-#{spaceMarine.weapon.name().toLowerCase().replace('_', '-')}"/>
-                    </p:column>
-                    <p:column headerText="Loyal">
-                        <h:outputText value="#{spaceMarine.loyal ? 'Yes': 'No'}"/>
-                    </p:column>
-                </p:dataTable>
                 <f:facet name="header">
-                    Get space marines with health less than
-                    <h:form styleClass="inline-block">
-                        <p:inputNumber value="#{actionsView.maxHealth}" styleClass="max-health"/>
-                        <p:commandButton value="Execute" styleClass="ui-button-outlined ml-2"
-                                         actionListener="#{actionsView.calculateMarinesWithHealthLessThan}"
-                                         update="health-marines"/>
+                    Update chapter name by id and create new chapter with legion
+                    <h:form styleClass="inline-block" id="form1">
+                        <p:inputNumber id="fIdUpdateName" value="#{actionsView.chapterId0}" placeholder="id" styleClass="chapter-id"/>
+                        <p:inputText id="fName" value="#{actionsView.chapterName0}" placeholder="new name" styleClass="chapter-name"/>
+                        <p:inputText id="fLegion0" value="#{actionsView.chapterLegion0}" placeholder="new chapter legion" styleClass="chapter-name"/>
+                        <p:commandButton id="bExecute1" value="Execute" styleClass="ui-button-outlined ml-2"
+                                         actionListener="#{actionsView.updateChapterName}"/>
                     </h:form>
                 </f:facet>
             </p:panel>
 
             <p:panel styleClass="mb-2">
-                <p:dataTable id="loyal-values"
-                             var="loyalValue" value="#{actionsView.uniqueLoyalValues}"
-                             emptyMessage="No values found.">
-                    <p:column headerText="Loyal">
-                        <h:outputText value="#{loyalValue ? 'Yes': 'No'}"/>
-                    </p:column>
-                </p:dataTable>
+                <p:outputLabel id="chapter-name1" value="name 1st read: #{actionsView.chapterData[0]}"/>
+                <br/>
+                <p:outputLabel id="chapter-name2" value="name 2nd read: #{actionsView.chapterData[1]}"/>
+                <br/>
+                <p:outputLabel id="legions-1" value="chapter count 1st read: #{actionsView.chapterData[2]}"/>
+                <br/>
+                <p:outputLabel id="legions-2" value="chapter count 2nd read: #{actionsView.chapterData[3]}"/>
                 <f:facet name="header">
-                    Get unique values of the "loyal" field in space marines
-                    <p:commandButton value="Execute" styleClass="ui-button-outlined ml-2"
-                                     actionListener="#{actionsView.calculateUniqueLoyalValues()}"
-                                     update="loyal-values"/>
+                    Get chapter name by id and get chapter id sum with legion
+                    <h:form styleClass="inline-block" id="form2">
+                        <p:inputNumber id="fIdGetName" value="#{actionsView.chapterId1}" placeholder="id" styleClass="chapter-id"/>
+                        <p:inputText id="fLegion1" value="#{actionsView.chapterLegion1}" placeholder="new name" styleClass="chapter-name"/>
+                        <p:commandButton id="bExecute2" value="Execute" styleClass="ui-button-outlined ml-2"
+                                         actionListener="#{actionsView.getChapterDataTwice}"
+                                         update="chapter-name1 chapter-name2 legions-1 legions-2"/>
+                    </h:form>
                 </f:facet>
             </p:panel>
 
-            <p:panel styleClass="mb-2">
-                You can only <i>change</i> the space marine chapter, so go to Space Marines page and do it!
-                <f:facet name="header">
-                    Expel a marine from his chapter
-                </f:facet>
-            </p:panel>
+<!--            <p:panel styleClass="mb-2">-->
+<!--                <h:outputText id="health" value="#{not empty actionsView.health ? actionsView.health : 'Click execute to calulate the value.'}"/>-->
+<!--                <f:facet name="header">-->
+<!--                    Calculate total health-->
+<!--                    <p:commandButton value="Execute" styleClass="ui-button-outlined ml-2"-->
+<!--                                     actionListener="#{actionsView.calculateTotalHealth}"-->
+<!--                                     update="health"/>-->
+<!--                </f:facet>-->
+<!--            </p:panel>-->
 
-            <p:panel styleClass="mb-2">
-                Before you delete a chapter, you need to <i>specify related space marines chapters</i>, so go to the Chapter page and click "Delete"!
-                <f:facet name="header">
-                    Delete the chapter
-                </f:facet>
-            </p:panel>
+<!--            <p:panel styleClass="mb-2">-->
+<!--                <p:dataTable id="health-marines"-->
+<!--                             var="spaceMarine" value="#{actionsView.healthMarines}"-->
+<!--                             emptyMessage="No space marines found with given criteria.">-->
+<!--                    <p:column headerText="Id" width="80">-->
+<!--                        <h:outputText value="#{spaceMarine.id}"/>-->
+<!--                    </p:column>-->
+<!--                    <p:column headerText="Name">-->
+<!--                        <h:outputText value="#{spaceMarine.name}"/>-->
+<!--                    </p:column>-->
+<!--                    <p:column headerText="Chapter">-->
+<!--                        <h:outputText value="#{spaceMarine.chapter}"/>-->
+<!--                    </p:column>-->
+<!--                    <p:column headerText="Coord X" width="80">-->
+<!--                        <h:outputText value="#{spaceMarine.coordinates.x}"/>-->
+<!--                    </p:column>-->
+<!--                    <p:column headerText="Coord Y" width="80">-->
+<!--                        <h:outputText value="#{spaceMarine.coordinates.y}"/>-->
+<!--                    </p:column>-->
+<!--                    <p:column headerText="Health" width="70">-->
+<!--                        <h:outputText value="#{spaceMarine.health}"/>-->
+<!--                    </p:column>-->
+<!--                    <p:column headerText="Category">-->
+<!--                        <h:outputText value="#{spaceMarine.category.toString()}"-->
+<!--                                      styleClass="crud-object-badge category-#{spaceMarine.category.name().toLowerCase().replace('_', '-')}"/>-->
+<!--                    </p:column>-->
+<!--                    <p:column headerText="Weapon">-->
+<!--                        <h:outputText value="#{spaceMarine.weapon.toString()}"-->
+<!--                                      styleClass="crud-object-badge weapon-#{spaceMarine.weapon.name().toLowerCase().replace('_', '-')}"/>-->
+<!--                    </p:column>-->
+<!--                    <p:column headerText="Loyal">-->
+<!--                        <h:outputText value="#{spaceMarine.loyal ? 'Yes': 'No'}"/>-->
+<!--                    </p:column>-->
+<!--                </p:dataTable>-->
+<!--                <f:facet name="header">-->
+<!--                    Get space marines with health less than-->
+<!--                    <h:form styleClass="inline-block">-->
+<!--                        <p:inputNumber value="#{actionsView.maxHealth}" styleClass="max-health"/>-->
+<!--                        <p:commandButton value="Execute" styleClass="ui-button-outlined ml-2"-->
+<!--                                         actionListener="#{actionsView.calculateMarinesWithHealthLessThan}"-->
+<!--                                         update="health-marines"/>-->
+<!--                    </h:form>-->
+<!--                </f:facet>-->
+<!--            </p:panel>-->
+
+<!--            <p:panel styleClass="mb-2">-->
+<!--                <p:dataTable id="loyal-values"-->
+<!--                             var="loyalValue" value="#{actionsView.uniqueLoyalValues}"-->
+<!--                             emptyMessage="No values found.">-->
+<!--                    <p:column headerText="Loyal">-->
+<!--                        <h:outputText value="#{loyalValue ? 'Yes': 'No'}"/>-->
+<!--                    </p:column>-->
+<!--                </p:dataTable>-->
+<!--                <f:facet name="header">-->
+<!--                    Get unique values of the "loyal" field in space marines-->
+<!--                    <p:commandButton value="Execute" styleClass="ui-button-outlined ml-2"-->
+<!--                                     actionListener="#{actionsView.calculateUniqueLoyalValues()}"-->
+<!--                                     update="loyal-values"/>-->
+<!--                </f:facet>-->
+<!--            </p:panel>-->
+
+<!--            <p:panel styleClass="mb-2">-->
+<!--                You can only <i>change</i> the space marine chapter, so go to Space Marines page and do it!-->
+<!--                <f:facet name="header">-->
+<!--                    Expel a marine from his chapter-->
+<!--                </f:facet>-->
+<!--            </p:panel>-->
+
+<!--            <p:panel styleClass="mb-2">-->
+<!--                Before you delete a chapter, you need to <i>specify related space marines chapters</i>, so go to the Chapter page and click "Delete"!-->
+<!--                <f:facet name="header">-->
+<!--                    Delete the chapter-->
+<!--                </f:facet>-->
+<!--            </p:panel>-->
         </div>
     </ui:define>
 </ui:composition>
